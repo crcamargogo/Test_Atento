@@ -81,7 +81,19 @@ th {
     }
 }
 
+.fixed-header {
 
+    position: fixed; /* Mantener fijo en la parte superior */
+    background: linear-gradient(135deg, #4a90e2, #50e3c2);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
 
 .header-title {
     font-size: 2.5em;
@@ -155,17 +167,6 @@ th {
     margin-right: 5px;
 }
 
-.fixed-header {
-        position: fixed; /* Mantener fijo en la parte superior */
-        top: 0; /* Ajustar a la parte superior */
-        left: 0; /* Alinear a la izquierda */
-        right: 0; /* Alinear a la derecha */
-        padding: 20px; /* Espaciado interior */
-        background-color: #f9f9f9; /* Fondo claro */
-        border-bottom: 1px solid #ddd; /* Línea inferior */
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra */
-        z-index: 1000; /* Asegurarse de que esté encima de otros elementos */
-    }
 
     </style>
 </head>
