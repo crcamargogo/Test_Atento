@@ -81,17 +81,7 @@ th {
     }
 }
 
-.fixed-header {
-    background: linear-gradient(135deg, #4a90e2, #50e3c2);
-    color: white;
-    padding: 20px;
-    text-align: center;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
+
 
 .header-title {
     font-size: 2.5em;
@@ -164,48 +154,19 @@ th {
 .response-count i {
     margin-right: 5px;
 }
+
 .fixed-header {
-        position: relative; /* Cambiado de fixed a relative */
+        position: fixed; /* Mantener fijo en la parte superior */
+        top: 0; /* Ajustar a la parte superior */
+        left: 0; /* Alinear a la izquierda */
+        right: 0; /* Alinear a la derecha */
         padding: 20px; /* Espaciado interior */
         background-color: #f9f9f9; /* Fondo claro */
         border-bottom: 1px solid #ddd; /* Línea inferior */
-        max-width: 100%; /* Ancho máximo al 100% */
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra */
+        z-index: 1000; /* Asegurarse de que esté encima de otros elementos */
     }
 
-    .header-title {
-        font-size: 24px;
-        margin-bottom: 10px;
-    }
-
-    .instructions,
-    .description,
-    .scale p {
-        font-size: 16px;
-        margin: 5px 0;
-    }
-
-    .scale {
-        margin: 10px 0;
-    }
-
-    .score {
-        font-weight: bold;
-        margin-top: 10px;
-    }
-
-    /* Media Queries para pantallas pequeñas */
-    @media (max-width: 600px) {
-        .header-title {
-            font-size: 20px; /* Tamaño de fuente más pequeño */
-        }
-
-        .instructions,
-        .description,
-        .scale p {
-            font-size: 14px; /* Tamaño de fuente más pequeño */
-        }
-    }
     </style>
 </head>
 <body>
@@ -223,6 +184,7 @@ th {
     
         <div class="score" id="scoreDisplay">Puntaje Total: 0</div>
     </div>
+    
     
     <!-- Sección de Integridad -->
     <h2>Integridad</h2>
