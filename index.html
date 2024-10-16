@@ -167,25 +167,34 @@ th {
     margin-right: 5px;
 }
 
+@media (max-width: 768px) {
+            .header-title {
+                font-size: 1.5em;
+            }
+            .instructions, .description, .scale p {
+                font-size: 0.8em;
+            }
+        }
+
 
     </style>
 </head>
 <body>
     <div class="fixed-header">
         <h1 class="header-title">Test de Credibilidad</h1>
-        <p class="instructions">Instrucciones:</p>
-        <p class="description">Cada fila integra dos enunciados opuestos sobre algún aspecto, en la que deberás completar con el número del nivel que mejor te define (Entre 1 y 4), según la siguiente escala:</p>
-    
-        <div class="scale">
-            <p><strong>1</strong> = Identificación total con la afirmación de la izquierda</p>
-            <p><strong>2</strong> = Identificación parcial con la afirmación de la izquierda</p>
-            <p><strong>3</strong> = Identificación total con la afirmación de la derecha</p>
-            <p><strong>4</strong> = Identificación parcial con la afirmación de la derecha</p>
+        <button class="toggle-button" id="toggleInstructions">Minimizar Instrucciones</button>
+        <div id="instructionsContainer">
+            <p class="instructions">Instrucciones:</p>
+            <p class="description">Cada fila integra dos enunciados opuestos sobre algún aspecto, en la que deberás completar con el número del nivel que mejor te define (Entre 1 y 4), según la siguiente escala:</p>
+            <div class="scale">
+                <p><strong>1</strong> = Identificación total con la afirmación de la izquierda</p>
+                <p><strong>2</strong> = Identificación parcial con la afirmación de la izquierda</p>
+                <p><strong>3</strong> = Identificación total con la afirmación de la derecha</p>
+                <p><strong>4</strong> = Identificación parcial con la afirmación de la derecha</p>
+            </div>
         </div>
-    
         <div class="score" id="scoreDisplay">Puntaje Total: 0</div>
     </div>
-    
     
     <!-- Sección de Integridad -->
     <h2>Integridad</h2>
@@ -571,6 +580,21 @@ th {
             document.body.appendChild(link); // Requerido para Firefox
             link.click(); // Simular clic para descargar
             document.body.removeChild(link); // Limpiar el DOM
+        });
+
+
+        const toggleButton = document.getElementById('toggleInstructions');
+        const instructionsContainer = document.getElementById('instructionsContainer');
+
+        toggleButton.addEventListener('click', function() {
+            // Alternar la visibilidad del contenedor de instrucciones
+            if (instructionsContainer.style.display === 'none') {
+                instructionsContainer.style.display = 'block';
+                toggleButton.textContent = 'Minimizar Instrucciones'; // Cambiar el texto del botón
+            } else {
+                instructionsContainer.style.display = 'none';
+                toggleButton.textContent = 'Mostrar Instrucciones'; // Cambiar el texto del botón
+            }
         });
     </script>
 </body>
