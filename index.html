@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Credibilidad</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    padding: 20px;
+}
+h1 {
+    color: #0073e6;
+}
+h2 {
+    color: #005bb5;
+    margin-top: 30px;
+}
+.table {
+    margin: 20px 0;
+}
+th, td {
+    padding: 10px;
+}
+th {
+    background-color: #0073e6;
+    color: white;
+}
+.question {
+    width: 30%;
+}
+.range {
+    width: 10%;
+    text-align: center;
+}
+.button {
+    color: white;
+    border: none;
+    padding: 10px 0;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 5px;
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+}
+.button.selected {
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.7);
+}
+.score {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
+}
+.btn-1 { background-color: #a8e6cf; } /* Verde pastel */
+.btn-2 { background-color: #ffd3b6; } /* Amarillo pastel */
+.btn-3 { background-color: #ffab91; } /* Naranja pastel */
+.btn-4 { background-color: #ff677d; } /* Rojo pastel */
+.fixed-header {
+    position: sticky;
+    top: 0;
+    background-color: #f4f4f9;
+    padding: 10px 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+@media (max-width: 768px) {
+    .question {
+        width: 100%;
+    }
+    .range {
+        width: 20%;
+    }
+}
+
+.fixed-header {
+    background: linear-gradient(135deg, #4a90e2, #50e3c2);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.header-title {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    animation: bounce 1s infinite;
+}
+
+.instructions {
+    font-size: 1.2em;
+    margin: 10px 0;
+}
+
+.description {
+    font-size: 1em;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.scale {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 15px;
+    border-radius: 8px;
+    margin: 10px 0;
+}
+
+.scale p {
+    margin: 5px 0;
+    font-weight: normal;
+}
+
+.score {
+    font-size: 1.5em;
+    margin-top: 20px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    animation: pulse 1.5s infinite;
+}
+
+/* Animaciones */
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.response-count {
+    margin-top: 30px;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+.response-count i {
+    margin-right: 5px;
+}
+
+    </style>
+</head>
+<body>
+    <div class="fixed-header">
+        <h1 class="header-title">Test de Credibilidad</h1>
+        <p class="instructions">Instrucciones:</p>
+        <p class="description">Cada fila integra dos enunciados opuestos sobre algún aspecto, en la que deberás completar con el número del nivel que mejor te define (Entre 1 y 4), según la siguiente escala:</p>
+    
+        <div class="scale">
+            <p><strong>1</strong> = Identificación total con la afirmación de la izquierda</p>
+            <p><strong>2</strong> = Identificación parcial con la afirmación de la izquierda</p>
+            <p><strong>3</strong> = Identificación total con la afirmación de la derecha</p>
+            <p><strong>4</strong> = Identificación parcial con la afirmación de la derecha</p>
+        </div>
+    
+        <div class="score" id="scoreDisplay">Puntaje Total: 0</div>
+    </div>
+    
+    <!-- Sección de Integridad -->
+    <h2>Integridad</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Afirmación Izquierda</th>
+                    <th>1</th>
+                    <th>2</th>
+                    <th>3</th>
+                    <th>4</th>
+                    <th>Afirmación Derecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="question">A veces encuentro justificacion a decir <mentirillas>,
+                        tergiversar lo que se de personas o situaciones o
+                        manipular la verdad para obtener los resultados que
+                        deseo.</td>
+                    <td class="range"><button class="button btn-1" data-question="q1" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q1" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q1" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q1" data-value="4">4</button></td>
+                    <td class="question">Soy totalmente honesto en todas mis
+                        interacciones con los demas y en todos los niveles.</td>
+                </tr>
+                <tr>
+                    <td class="question">A veces no hay coincidencia entre lo que pienso y
+                        lo que digo o entre mis acciones y mis valores.</td>
+                    <td class="range"><button class="button btn-1" data-question="q2" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q2" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q2" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q2" data-value="4">4</button></td>
+                    <td class="question">Lo que digo y lo que hago es lo que realmente pienso y siento;
+                        de manera constante hago lo que digo.</td>
+                </tr>
+
+                <tr>
+                    <td class="question">No tengo total claridad acerca de mis valores.
+                        Me es dificil defender algo cuando otras personas se
+                        oponen a ello.</td>
+                    <td class="range"><button class="button btn-1" data-question="q2" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q2" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q2" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q2" data-value="4">4</button></td>
+                    <td class="question">Tengo claros mis valores y
+                        soy valiente al defenderlos.</td>
+                </tr>
+
+                <tr>
+                    <td class="question">Es dificil para mi reconocer que otra persona puede tener
+                        razon o que hay por ahi informacion adicional que puede
+                        obligarme a cambiar de opinión.</td>
+                    <td class="range"><button class="button btn-1" data-question="q2" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q2" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q2" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q2" data-value="4">4</button></td>
+                    <td class="question">Tengo la mente honestamente abierta a la posibilidad de
+                        aprender nuevas ideas que pueden llevarme a replantearme
+                        asuntos e incluso a redefinir mis valores.</td>
+                </tr>
+
+                <tr>
+                    <td class="question">Me cuesta mucho plantearme y lograr metas o
+                        compromisos personales.</td>
+                    <td class="range"><button class="button btn-1" data-question="q2" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q2" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q2" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q2" data-value="4">4</button></td>
+                    <td class="question">Puedo constantemente adquirir compromisos para con
+                        mi persona y para con los demas y cumplir con ellos.</td>
+                </tr>
+                <!-- Agregar más preguntas de Integridad aquí -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Sección de Intención -->
+    <h2>Intención</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Afirmación Izquierda</th>
+                    <th>1</th>
+                    <th>2</th>
+                    <th>3</th>
+                    <th>4</th>
+                    <th>Afirmación Derecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="question">Siento que realmente no estoy
+                        utilizando mis talentos en mi trabajo actual.</td>
+                    <td class="range"><button class="button btn-1" data-question="q3" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q3" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q3" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q3" data-value="4">4</button></td>
+                    <td class="question">Hay una correspondencia muy estrecha entre mis talentos
+                        y mis oportunidades en el trabajo que estoy realizando.</td>
+                </tr>
+                <tr>
+                    <td class="question">No he adquirido los conocimientos ni desarrollado
+                        plenamente las aptitudes que necesito para ser realmente
+                        una persona efectiva en el trabajo.</td>
+                    <td class="range"><button class="button btn-1" data-question="q4" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q4" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q4" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q4" data-value="4">4</button></td>
+                    <td class="question">He adquirido los conocimientos y consolidado las
+                        aptitudes que necesito para mi trabajo.</td>
+                </tr>
+
+                <tr>
+                    <td class="question">En raras ocasiones me tomo el tiempo para mejorar
+                        mis conocimientos y aptitudes en el trabajo o en cualquier
+                        otro campo de mi vida.
+                        </td>
+                    <td class="range"><button class="button btn-1" data-question="q4" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q4" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q4" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q4" data-value="4">4</button></td>
+                    <td class="question">Mejoro incesantemente mis conocimientos y
+                        aptitudes en todos los campos importantes de mi vida.</td>
+                </tr>
+
+                <tr>
+                    <td class="question">No tengo realmente seguridad acerca de cuales son mis
+                        fortalezas;
+                        me concentro mas en tratar de remediar mis debilidades.
+                        </td>
+                    <td class="range"><button class="button btn-1" data-question="q4" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q4" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q4" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q4" data-value="4">4</button></td>
+                    <td class="question">He identificado mis fortalezas y concentro mis esfuerzos
+                        en utilizarlas de manera efectiva.</td>
+                </tr>
+
+                <tr>
+                    <td class="question">A estas alturas realmente no se mucho acerca
+                        de como fomentar la confianza.
+                        </td>
+                    <td class="range"><button class="button btn-1" data-question="q4" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q4" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q4" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q4" data-value="4">4</button></td>
+                    <td class="question">Se como establecer, hacer crecer, extender y restaurar la
+                        confianza
+                        efectivamente y trabajo de manera consciente para que sea así.</td>
+                </tr>
+
+                
+                <!-- Agregar más preguntas de Intención aquí -->
+            </tbody>
+        </table>
+    </div>
+
+    <h2>Aptitudes</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Afirmación Izquierda</th>
+                    <th>1</th>
+                    <th>2</th>
+                    <th>3</th>
+                    <th>4</th>
+                    <th>Afirmación Derecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="question">Siento que realmente no estoy
+                        utilizando mis talentos en mi trabajo actual.</td>
+                    <td class="range"><button class="button btn-1" data-question="q3" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q3" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q3" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q3" data-value="4">4</button></td>
+                    <td class="question">Hay una correspondencia muy estrecha entre mis talentos
+                        y mis oportunidades en el trabajo que estoy realizando.</td>
+                </tr>
+                <tr>
+                    <td class="question">No he adquirido los conocimientos ni desarrollado
+                        plenamente las aptitudes que necesito para ser realmente
+                        una persona efectiva en el trabajo.</td>
+                    <td class="range"><button class="button btn-1" data-question="q4" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q4" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q4" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q4" data-value="4">4</button></td>
+                    <td class="question">He adquirido los conocimientos y consolidado las
+                        aptitudes que necesito para mi trabajo.</td>
+                </tr>
+
+                <tr>
+                    <td class="question">En raras ocasiones me tomo el tiempo para mejorar
+                        mis conocimientos y aptitudes en el trabajo o en cualquier
+                        otro campo de mi vida.
+                        </td>
+                    <td class="range"><button class="button btn-1" data-question="q4" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q4" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q4" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q4" data-value="4">4</button></td>
+                    <td class="question">Mejoro incesantemente mis conocimientos y
+                        aptitudes en todos los campos importantes de mi vida.</td>
+                </tr>
+
+                <tr>
+                    <td class="question">No tengo realmente seguridad acerca de cuales son mis
+                        fortalezas;
+                        me concentro mas en tratar de remediar mis debilidades.
+                        </td>
+                    <td class="range"><button class="button btn-1" data-question="q4" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q4" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q4" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q4" data-value="4">4</button></td>
+                    <td class="question">He identificado mis fortalezas y concentro mis esfuerzos
+                        en utilizarlas de manera efectiva.</td>
+                </tr>
+
+                <tr>
+                    <td class="question">A estas alturas realmente no se mucho acerca
+                        de como fomentar la confianza.
+                        </td>
+                    <td class="range"><button class="button btn-1" data-question="q4" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q4" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q4" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q4" data-value="4">4</button></td>
+                    <td class="question">
+                        Se como establecer, hacer crecer, extender y restaurar la
+                        confianza
+                        efectivamente y trabajo de manera consciente para que sea asi.</td>
+                </tr>
+
+                
+                <!-- Agregar más preguntas de Intención aquí -->
+            </tbody>
+        </table>
+    </div>
+
+    <h2>Resultados</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Afirmación Izquierda</th>
+                    <th>1</th>
+                    <th>2</th>
+                    <th>3</th>
+                    <th>4</th>
+                    <th>Afirmación Derecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="question">No tengo un historial muy bueno. Con toda seguridad mi
+                        curriculo no hara que nadie se desmaye.</td>
+                    <td class="range"><button class="button btn-1" data-question="q3" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q3" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q3" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q3" data-value="4">4</button></td>
+                    <td class="question">Mi historial inspirara claramente en los demas confianza
+                        en que yo lograre los resultados deseados.</td>
+                </tr>
+                <tr>
+                    <td class="question">Concentro mis esfuerzos en hacer lo
+                        que se me ha dicho que haga.</td>
+                    <td class="range"><button class="button btn-1" data-question="q4" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q4" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q4" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q4" data-value="4">4</button></td>
+                    <td class="question">Concentro mis esfuerzos en ofrecer resultados, no
+                        actividades.</td>
+                </tr>
+
+                <tr>
+                    <td class="question">Cuando se trata de referirme a mis antecedentes, o
+                        no digo nada (por no querer que suene a presuncion), o
+                        digo mucho y desilusiono a la gente.</td>
+                    <td class="range"><button class="button btn-1" data-question="q4" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q4" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q4" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q4" data-value="4">4</button></td>
+                    <td class="question">Puedo transmitir mis antecedentes a los demas de
+                        manera apropiada y en una forma que inspira confianza.</td>
+                </tr>
+
+                <tr>
+                    <td class="question">A menudo se me queda sin terminar lo
+                        que empiezo.</td>
+                    <td class="range"><button class="button btn-1" data-question="q4" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q4" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q4" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q4" data-value="4">4</button></td>
+                    <td class="question">Con raras excepciones si empiezo algo lo termino.</td>
+                </tr>
+
+
+                <tr>
+                    <td class="question">No me preocupo tanto acerca de cómo
+                        logro los resultados; solo de que los logre.</td>
+                    <td class="range"><button class="button btn-1" data-question="q4" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q4" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q4" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q4" data-value="4">4</button></td>
+                    <td class="question">De manera constante obtengo resultados
+                        en formas que inspiran confianza.</td>
+                </tr>
+
+
+                
+                <!-- Agregar más preguntas de Intención aquí -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Sección de Respuestas -->
+    <div class="response-count">
+        <i class="fas fa-users"></i>
+        <span id="responseCount">0</span> personas han respondido.
+    </div>
+
+    <button id="sendBtn" class="btn btn-success">Enviar</button>
+    <button id="downloadBtn" class="btn btn-primary">Descargar Respuestas CSV</button>
+
+    <script>
+        let totalScore = 0; // Inicializar el puntaje total
+        let responseCount = 0; // Contador de respuestas
+        const responses = []; // Arreglo para almacenar respuestas
+
+        document.querySelectorAll('.button').forEach(button => {
+            button.addEventListener('click', () => {
+                const question = button.dataset.question;
+                const value = button.dataset.value;
+
+                // Resaltar el botón seleccionado
+                document.querySelectorAll(`button[data-question="${question}"]`).forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                button.classList.add('selected');
+
+                // Actualizar el puntaje total
+                totalScore += parseInt(value);
+                document.getElementById('scoreDisplay').innerText = `Puntaje Total: ${totalScore}`;
+
+                // Almacenar la respuesta
+                responses.push({ question: question, value: value });
+            });
+        });
+
+        // Función para enviar las respuestas
+        document.getElementById('sendBtn').addEventListener('click', () => {
+            if (responses.length > 0) {
+                // Incrementar el contador de respuestas
+                responseCount++;
+                document.getElementById('responseCount').innerText = responseCount;
+
+                // Opcional: puedes limpiar las respuestas si deseas
+                // responses.length = 0; 
+                alert("Gracias por enviar tus respuestas.");
+            } else {
+                alert("Por favor, selecciona al menos una respuesta antes de enviar.");
+            }
+        });
+
+        // Función para descargar las respuestas como CSV
+        document.getElementById('downloadBtn').addEventListener('click', () => {
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Pregunta,Respuesta\n"; // Encabezados CSV
+
+            responses.forEach(response => {
+                csvContent += `${response.question},${response.value}\n`; // Agregar datos
+            });
+
+            // Crear un enlace de descarga
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "respuestas.csv");
+            document.body.appendChild(link); // Requerido para Firefox
+            link.click(); // Simular clic para descargar
+            document.body.removeChild(link); // Limpiar el DOM
+        });
+    </script>
+</body>
+</html>
