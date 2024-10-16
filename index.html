@@ -554,7 +554,7 @@ th {
         });
     
         // Función para enviar las respuestas
-document.getElementById('sendBtn').addEventListener('click', () => {
+        document.getElementById('sendBtn').addEventListener('click', () => {
     if (responses.length > 0) {
         // Incrementar el contador de respuestas
         responseCount++;
@@ -565,12 +565,15 @@ document.getElementById('sendBtn').addEventListener('click', () => {
 
         alert("Gracias por enviar tus respuestas.");
 
-        // Redirigir a otro HTML
-        window.location.href = 'index2.html'; // Cambia 'otraPagina.html' por la ruta de tu HTML
+        // Redirigir a otra página después de un retraso de 3 segundos
+        setTimeout(() => {
+            window.location.href = 'index2.html'; // Cambia 'index2.html' por la ruta de tu HTML
+        }, 10000); // 3000 milisegundos = 3 segundos
     } else {
         alert("Por favor, selecciona al menos una respuesta antes de enviar.");
     }
 });
+
 
     
         // Función para calcular y mostrar el nivel de credibilidad
