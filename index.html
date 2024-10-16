@@ -164,7 +164,48 @@ th {
 .response-count i {
     margin-right: 5px;
 }
+.fixed-header {
+        position: relative; /* Cambiado de fixed a relative */
+        padding: 20px; /* Espaciado interior */
+        background-color: #f9f9f9; /* Fondo claro */
+        border-bottom: 1px solid #ddd; /* Línea inferior */
+        max-width: 100%; /* Ancho máximo al 100% */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra */
+    }
 
+    .header-title {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .instructions,
+    .description,
+    .scale p {
+        font-size: 16px;
+        margin: 5px 0;
+    }
+
+    .scale {
+        margin: 10px 0;
+    }
+
+    .score {
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    /* Media Queries para pantallas pequeñas */
+    @media (max-width: 600px) {
+        .header-title {
+            font-size: 20px; /* Tamaño de fuente más pequeño */
+        }
+
+        .instructions,
+        .description,
+        .scale p {
+            font-size: 14px; /* Tamaño de fuente más pequeño */
+        }
+    }
     </style>
 </head>
 <body>
