@@ -194,6 +194,11 @@ th {
             </div>
         </div>
         <div class="score" id="scoreDisplay">Puntaje Total: 0</div>
+
+        <div class="result" id="resultContainer">
+            <h2 id="credibilityLevel"></h2>
+            <p id="credibilityMessage"></p>
+        </div>
     </div>
     
     <!-- Sección de Integridad -->
@@ -527,51 +532,77 @@ th {
         let totalScore = 0; // Inicializar el puntaje total
         let responseCount = 0; // Contador de respuestas
         const responses = []; // Arreglo para almacenar respuestas
-
+    
         document.querySelectorAll('.button').forEach(button => {
             button.addEventListener('click', () => {
                 const question = button.dataset.question;
                 const value = button.dataset.value;
-
+    
                 // Resaltar el botón seleccionado
                 document.querySelectorAll(`button[data-question="${question}"]`).forEach(btn => {
                     btn.classList.remove('selected');
                 });
                 button.classList.add('selected');
-
+    
                 // Actualizar el puntaje total
                 totalScore += parseInt(value);
                 document.getElementById('scoreDisplay').innerText = `Puntaje Total: ${totalScore}`;
-
+    
                 // Almacenar la respuesta
                 responses.push({ question: question, value: value });
             });
         });
-
+    
         // Función para enviar las respuestas
         document.getElementById('sendBtn').addEventListener('click', () => {
             if (responses.length > 0) {
                 // Incrementar el contador de respuestas
                 responseCount++;
                 document.getElementById('responseCount').innerText = responseCount;
-
-                // Opcional: puedes limpiar las respuestas si deseas
-                // responses.length = 0; 
+    
+                // Mostrar el puntaje total y el nivel de credibilidad
+                updateCredibility(totalScore);
+    
                 alert("Gracias por enviar tus respuestas.");
             } else {
                 alert("Por favor, selecciona al menos una respuesta antes de enviar.");
             }
         });
-
+    
+        // Función para calcular y mostrar el nivel de credibilidad
+        function updateCredibility(score) {
+            const credibilityLevel = document.getElementById('credibilityLevel');
+            const credibilityMessage = document.getElementById('credibilityMessage');
+            const resultContainer = document.getElementById('resultContainer');
+    
+            // Actualiza el puntaje en la pantalla
+            document.getElementById('scoreDisplay').textContent = `Puntaje Total: ${score}`;
+    
+            // Determinar el nivel de credibilidad
+            if (score <= 40) {
+                credibilityLevel.textContent = 'CREDIBILIDAD BAJA';
+                credibilityMessage.innerHTML = 'Es probable que tengas dificultades para demostrar tu credibilidad frente a tu entorno, y los demas les cueste confiar en ti. Pide a tu equipo y/o pares que respondan este test pensando en ti para identificar las conductas que has normalizado en el dia a dia y que probablemente, esten generando una vision de ti que no es la idonea.';
+            } else if (score > 40 && score <= 60) {
+                credibilityLevel.textContent = 'CREDIBILIDAD MEDIA';
+                credibilityMessage.innerHTML = 'Tiendes a actuar consecuentemente, sin embargo, podrias estar mostrando ciertas brechas de credibilidad que podrian reflejarse en una menor confianza en tu persona en situaciones de alta complejidad o inspirar menor confianza a los demas. Pide a tu equipo y/o pares que respondan este test pensando en ti y analiza con mas detalle donde estan tus brechas para que puedas mejorarlas.';
+            } else if (score > 60 && score <= 80) {
+                credibilityLevel.textContent = 'CREDIBILIDAD ALTA';
+                credibilityMessage.innerHTML = 'Posees una alta credibilidad personal de manera constante. Lo sueles demostrar a traves de tu caracter y formas de actuar en el dia a dia. Tienes una alta valoracion de tu persona y de aquellos quienes te rodean. Eres consciente de tus propias aptitudes y las desarrollas y usas de manera efectiva para producir resultados positivos. Como resultado de esto, sientes seguridad y la gente tiende a confiar mas en ti.';
+            }
+    
+            // Mostrar el contenedor de resultados
+            resultContainer.style.display = 'block';
+        }
+    
         // Función para descargar las respuestas como CSV
         document.getElementById('downloadBtn').addEventListener('click', () => {
             let csvContent = "data:text/csv;charset=utf-8,";
             csvContent += "Pregunta,Respuesta\n"; // Encabezados CSV
-
+    
             responses.forEach(response => {
                 csvContent += `${response.question},${response.value}\n`; // Agregar datos
             });
-
+    
             // Crear un enlace de descarga
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
@@ -581,11 +612,10 @@ th {
             link.click(); // Simular clic para descargar
             document.body.removeChild(link); // Limpiar el DOM
         });
-
-
+    
         const toggleButton = document.getElementById('toggleInstructions');
         const instructionsContainer = document.getElementById('instructionsContainer');
-
+    
         toggleButton.addEventListener('click', function() {
             // Alternar la visibilidad del contenedor de instrucciones
             if (instructionsContainer.style.display === 'none') {
@@ -597,5 +627,6 @@ th {
             }
         });
     </script>
+    
 </body>
 </html>
