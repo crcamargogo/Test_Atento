@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Credibilidad</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    padding: 20px;
+}
+h1 {
+    color: #0073e6;
+}
+h2 {
+    color: #005bb5;
+    margin-top: 30px;
+}
+.table {
+    margin: 20px 0;
+}
+th, td {
+    padding: 10px;
+}
+th {
+    background-color: #0073e6;
+    color: white;
+}
+.question {
+    width: 30%;
+}
+.range {
+    width: 10%;
+    text-align: center;
+}
+.button {
+    color: white;
+    border: none;
+    padding: 10px 0;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 5px;
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+}
+.button.selected {
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.7);
+}
+.score {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
+}
+.btn-1 { background-color: #a8e6cf; } /* Verde pastel */
+.btn-2 { background-color: #ffd3b6; } /* Amarillo pastel */
+.btn-3 { background-color: #ffab91; } /* Naranja pastel */
+.btn-4 { background-color: #ff677d; } /* Rojo pastel */
+.fixed-header {
+    position: sticky;
+    top: 0;
+    background-color: #f4f4f9;
+    padding: 10px 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+@media (max-width: 768px) {
+    .question {
+        width: 100%;
+    }
+    .range {
+        width: 20%;
+    }
+}
+
+.fixed-header {
+
+    position: fixed; /* Mantener fijo en la parte superior */
+    background: linear-gradient(135deg, #4a90e2, #50e3c2);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.header-title {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    animation: bounce 1s infinite;
+}
+
+.instructions {
+    font-size: 1.2em;
+    margin: 10px 0;
+}
+
+.description {
+    font-size: 1em;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.scale {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 15px;
+    border-radius: 8px;
+    margin: 10px 0;
+}
+
+.scale p {
+    margin: 5px 0;
+    font-weight: normal;
+}
+
+.score {
+    font-size: 1.5em;
+    margin-top: 20px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    animation: pulse 1.5s infinite;
+}
+
+/* Animaciones */
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.response-count {
+    margin-top: 30px;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+.response-count i {
+    margin-right: 5px;
+}
+
+@media (max-width: 768px) {
+            .header-title {
+                font-size: 1.5em;
+            }
+            .instructions, .description, .scale p {
+                font-size: 0.8em;
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="fixed-header">
+        <h1 class="header-title">Test de Nivel De Madurez Agile
+        </h1>
+        <button class="toggle-button" id="toggleInstructions">Minimizar Instrucciones</button>
+        <div id="instructionsContainer">
+            <p class="instructions">Instrucciones:</p>
+            <p class="description">Cada fila integra dos enunciados opuestos sobre algún aspecto, en la que deberás completar con el número del nivel que mejor te define (Entre 1 y 4), según la siguiente escala:</p>
+            <div class="scale">
+                <p><strong>1</strong> = Identificación total con la afirmación de la izquierda</p>
+                <p><strong>2</strong> = Identificación parcial con la afirmación de la izquierda</p>
+                <p><strong>3</strong> = Identificación total con la afirmación de la derecha</p>
+                <p><strong>4</strong> = Identificación parcial con la afirmación de la derecha</p>
+            </div>
+        </div>
+        <div class="score" id="scoreDisplay">Puntaje Total: 0</div>
+
+        <div class="result" id="resultContainer">
+            <h2 id="credibilityLevel"></h2>
+            <p id="credibilityMessage"></p>
+        </div>
+    </div>
+    
+    <!-- Sección de Integridad -->
+    <h2>Integridad</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Afirmación Izquierda</th>
+                    <th>1</th>
+                    <th>2</th>
+                    <th>3</th>
+                    <th>4</th>
+                    <th>Afirmación Derecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="question">Los miembros rara vez dicen lo que piensan. Evitamos conflictos. Las discusiones son tentativas y educadas.
+
+                    </td>
+                    <td class="range"><button class="button btn-1" data-question="q1" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q1" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q1" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q1" data-value="4">4</button></td>
+                    <td class="question">Tenemos el coraje de ser honestos los unos con los otros. No dudamos en involucrarnos en conflictos constructivos.
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="question">El trabajo se realiza individualmente. Poca o ninguna colaboración dentro del equipo o con otros equipos.
+                    </td>
+                    <td class="range"><button class="button btn-1" data-question="q1" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q1" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q1" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q1" data-value="4">4</button></td>
+                    <td class="question">El equipo comparte perspectivas, contexto e innovaciones con otros equipos y otras partes de la organización.
+                    </td>
+                </tr>
+                <tr>
+                    <td class="question">Rara vez nos elogiamos unos a otros, no damos retroalimentación, ni nos desafiamos mutuamente por actuar de manera irresponsable o romper nuestro acuerdo de Trabajo.
+
+                        </td>
+                    <td class="range"><button class="button btn-1" data-question="q2" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q2" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q2" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q2" data-value="4">4</button></td>
+                    <td class="question">Damos retroalimentación positiva, pero también denunciamos las deficiencias y los comportamientos improductivos de los demás.
+
+                        </td>
+                </tr>
+
+                <tr>
+                    <td class="question">Muchos se sienten prisioneros en la reunión. Solo unos pocos participan en las discusiones.
+                    </td>
+                    <td class="range"><button class="button btn-1" data-question="q2" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q2" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q2" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q2" data-value="4">4</button></td>
+                    <td class="question">La gente participa en las reuniones. Quieren estar ahí. Las discusiones son apasionadas.
+
+                        </td>
+                </tr>
+
+                <tr>
+                    <td class="question">No tenemos un consenso real sobre nuestros objetivos. Realmente no aceptamos el plan ni hacemos un seguimiento de que las personas cumplan con sus compromisos.
+                    </td>
+                    <td class="range"><button class="button btn-1" data-question="q2" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q2" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q2" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q2" data-value="4">4</button></td>
+                    <td class="question">Nos comprometemos con nuestros planes y nos
+                        responsabilizamos mutuamente de hacer todo lo posible para
+                        alcanzar nuestros objetivos y ejecutar los puntos de accion
+                        asignados.
+                        </td>
+                </tr>
+
+                <tr>
+                    <td class="question">No nos enfocamos en cuestionar nuestro proceso o forma
+                        de trabajar. Si alguien nos pidiera que demostraramos que
+                        hemos mejorado, no tenemos ni idea de como hacerlo.
+                        </td>
+                    <td class="range"><button class="button btn-1" data-question="q2" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q2" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q2" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q2" data-value="4">4</button></td>
+                    <td class="question">Nos esforzamos apasionadamente por descubrir como trabajar
+                        mejor y de manera mas eficiente como equipo. Tratamos de
+                        "saber" si mejoramos.
+                        
+                        </td>
+                </tr>
+
+                <tr>
+                    <td class="question">Cuando fracasamos, tratamos de averiguar quien hizo que
+                        mal. Cuando tenemos exito, celebramos a los individuos.                    
+                        </td>
+                    <td class="range"><button class="button btn-1" data-question="q2" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q2" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q2" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q2" data-value="4">4</button></td>
+                    <td class="question">Nos sentimos mutuamente responsables de lograr nuestros
+                        objetivos. Ganamos y fracasamos como equipo.
+                        </td>
+                </tr>
+
+                <tr>
+                    <td class="question">Cuando nos encontramos con problemas o dependencias,
+                        alertamos y pedimos ayuda a los jefes y luego esperamos.                  
+                        </td>
+                    <td class="range"><button class="button btn-1" data-question="q2" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q2" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q2" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q2" data-value="4">4</button></td>
+                    <td class="question">Hacemos todo lo posible para desbloquearnos cuando nos
+                        encontramos con impedimentos o dependencias.
+                        </td>
+                </tr>
+
+
+                <tr>
+                    <td class="question">Nos sentimos avergonzados de nuestro ritmo y de la
+                        calidad de nuestros resultados.                                     
+                        </td>
+                    <td class="range"><button class="button btn-1" data-question="q2" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q2" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q2" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q2" data-value="4">4</button></td>
+                    <td class="question">Nos sentimos orgullosos de nuestro trabajo y de lo que
+                        logramos.
+                        
+                        </td>
+                </tr>
+
+
+                <tr>
+                    <td class="question">Realmente no nos conocemos ni sabemos que es lo que
+                        motiva a los demas.                 
+                        </td>
+                    <td class="range"><button class="button btn-1" data-question="q2" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q2" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q2" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q2" data-value="4">4</button></td>
+                    <td class="question">Los miembros del equipo dedican tiempo y esfuerzo a construir
+                        relaciones solidas entre ellos.
+                        </td>
+                </tr>
+
+
+                <tr>
+                    <td class="question">Actuamos como peones en una partida de ajedrez. No
+                        exigimos participacion en la definicion de nuestras metas
+                        ni consecuencias por los resultados.
+                            
+                        </td>
+                    <td class="range"><button class="button btn-1" data-question="q2" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q2" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q2" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q2" data-value="4">4</button></td>
+                    <td class="question">Nos comprometemos a definir nuestras propias metas y nos
+                        hacemos cargo de nuestros resultados.
+                        </td>
+                </tr>
+
+                <tr>
+                    <td class="question">La gente hace cosas que pasan desapercibidas y, a
+                        menudo, se olvida de compartir noticias o informacion
+                        relevante.            
+                        </td>
+                    <td class="range"><button class="button btn-1" data-question="q2" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q2" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q2" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q2" data-value="4">4</button></td>
+                    <td class="question">Compartimos lo que sabemos y aprendemos. Nadie oculta
+                        informacion que afecte al equipo.
+                        
+                        </td>
+                </tr>
+
+                <tr>
+                    <td class="question">No sabemos en que areas quiere crecer la gente. Tenemos
+                        problemas para colaborar ya que somos muy diferentes y
+                        vemos las cosas de manera diferente. 
+                        </td>
+                    <td class="range"><button class="button btn-1" data-question="q2" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q2" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q2" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q2" data-value="4">4</button></td>
+                    <td class="question">Damos rienda suelta a la pasion de los demas y nos
+                        preocupamos por el desarrollo personal de los demas.
+                        Aprovechamos nuestras diferencias.
+                        </td>
+                </tr>
+
+
+                <tr>
+                    <td class="question">El equipo se siente como un grupo diverso de personas con
+                        diferentes objetivos e intereses.
+                           
+                        </td>
+                    <td class="range"><button class="button btn-1" data-question="q2" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q2" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q2" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q2" data-value="4">4</button></td>
+                    <td class="question">Nadie tiene agendas ocultas. Sentimos que la lealtad de todos
+                        esta con ESTE equipo./td>
+                </tr>
+
+
+
+                <tr>
+                    <td class="question">La gente viene a trabajar 8 horas y se concentra en sus
+                        propias tareas.
+                           
+                        </td>
+                    <td class="range"><button class="button btn-1" data-question="q2" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q2" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q2" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q2" data-value="4">4</button></td>
+                    <td class="question">Cada miembro quiere que ESTE equipo sea grande y exitoso.
+
+                        </td>
+                </tr>
+
+                <tr>
+                    <td class="question">Nuestros comportamientos, colaboracion y comunicacion
+                        se desmoronan cuando nos estresamos.
+                           
+                        </td>
+                    <td class="range"><button class="button btn-1" data-question="q2" data-value="1">1</button></td>
+                    <td class="range"><button class="button btn-2" data-question="q2" data-value="2">2</button></td>
+                    <td class="range"><button class="button btn-3" data-question="q2" data-value="3">3</button></td>
+                    <td class="range"><button class="button btn-4" data-question="q2" data-value="4">4</button></td>
+                    <td class="question">Respetamos nuestros procesos y acuerdos de trabajo incluso
+                        cuando estamos bajo presión.</td>
+                </tr>
+
+                <!-- Agregar más preguntas de Integridad aquí -->
+            </tbody>
+        </table>
+    </div>
+
+
+    <!-- Sección de Respuestas -->
+    <div class="response-count">
+        <i class="fas fa-users"></i>
+        <span id="responseCount">0</span> personas han respondido.
+    </div>
+
+    <button id="sendBtn" class="btn btn-success">Enviar</button>
+    <button id="downloadBtn" class="btn btn-primary">Descargar Respuestas CSV</button>
+
+    <script>
+        let totalScore = 0; // Inicializar el puntaje total
+        let responseCount = 0; // Contador de respuestas
+        const responses = []; // Arreglo para almacenar respuestas
+    
+        document.querySelectorAll('.button').forEach(button => {
+            button.addEventListener('click', () => {
+                const question = button.dataset.question;
+                const value = button.dataset.value;
+    
+                // Resaltar el botón seleccionado
+                document.querySelectorAll(`button[data-question="${question}"]`).forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                button.classList.add('selected');
+    
+                // Actualizar el puntaje total
+                totalScore += parseInt(value);
+                document.getElementById('scoreDisplay').innerText = `Puntaje Total: ${totalScore}`;
+    
+                // Almacenar la respuesta
+                responses.push({ question: question, value: value });
+            });
+        });
+    
+        // Función para enviar las respuestas
+        document.getElementById('sendBtn').addEventListener('click', () => {
+            if (responses.length > 0) {
+                // Incrementar el contador de respuestas
+                responseCount++;
+                document.getElementById('responseCount').innerText = responseCount;
+    
+                // Mostrar el puntaje total y el nivel de credibilidad
+                updateCredibility(totalScore);
+    
+                alert("Gracias por enviar tus respuestas.");
+            } else {
+                alert("Por favor, selecciona al menos una respuesta antes de enviar.");
+            }
+        });
+    
+        // Función para calcular y mostrar el nivel de credibilidad
+        function updateCredibility(score) {
+            const credibilityLevel = document.getElementById('credibilityLevel');
+            const credibilityMessage = document.getElementById('credibilityMessage');
+            const resultContainer = document.getElementById('resultContainer');
+    
+            // Actualiza el puntaje en la pantalla
+            document.getElementById('scoreDisplay').textContent = `Puntaje Total: ${score}`;
+    
+            // Determinar el nivel de credibilidad
+            if (score <= 32) {
+                credibilityLevel.textContent = 'PRINCIPIANTE';
+                credibilityMessage.innerHTML = '"Tu equipo está dado los primeros pasos. Date  tiempo para definir bien los roles y las responsabilidades, trabaja con ellos en construir un equipo agile. Empieza por redefinir tu Governance y apóyate en herramientas básicas como Teams y Planner para trabajar de forma más colaborativa. El taller de Liderazgo te facilitará el camino.Recuerda que un equipo agile se construye, requiere nuevos hábitos y constancia."';
+            } else if (score > 33 && score <= 48) {
+                credibilityLevel.textContent = 'ENCAMINADO';
+                credibilityMessage.innerHTML = '"Tu equipo es un equipo ágil en potencia, debes trabajar consistentemente para evolucionar vuestra forma de trabajo y adoptar un mindset agile. Identifica los aspectos a mejorar y optimiza el uso de herramientas como Teams (no solo chat), Planner, Forms, Estructuras liberadoras, entre otras. Recuerda que un equipo agile está en constante evolución"';
+            } else if (score > 48 && score >= 64) {
+                credibilityLevel.textContent = 'AVANZADO';
+                credibilityMessage.innerHTML = '"Tu equipo va por el camino de la agilidad.Tal vez algunos aspectos merezcan un análisis más profundo.Haz preguntas abiertas e identifica que pueden estar necesitando,  deja que el equipo sea quien proponga lo siguientes pasos.Recuerda que ser agile es un camino no un destino."';
+            }
+    
+            // Mostrar el contenedor de resultados
+            resultContainer.style.display = 'block';
+        }
+    
+        // Función para descargar las respuestas como CSV
+        document.getElementById('downloadBtn').addEventListener('click', () => {
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Pregunta,Respuesta\n"; // Encabezados CSV
+    
+            responses.forEach(response => {
+                csvContent += `${response.question},${response.value}\n`; // Agregar datos
+            });
+    
+            // Crear un enlace de descarga
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "respuestas.csv");
+            document.body.appendChild(link); // Requerido para Firefox
+            link.click(); // Simular clic para descargar
+            document.body.removeChild(link); // Limpiar el DOM
+        });
+    
+        const toggleButton = document.getElementById('toggleInstructions');
+        const instructionsContainer = document.getElementById('instructionsContainer');
+    
+        toggleButton.addEventListener('click', function() {
+            // Alternar la visibilidad del contenedor de instrucciones
+            if (instructionsContainer.style.display === 'none') {
+                instructionsContainer.style.display = 'block';
+                toggleButton.textContent = 'Minimizar Instrucciones'; // Cambiar el texto del botón
+            } else {
+                instructionsContainer.style.display = 'none';
+                toggleButton.textContent = 'Mostrar Instrucciones'; // Cambiar el texto del botón
+            }
+        });
+    </script>
+    
+</body>
+</html>

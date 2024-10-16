@@ -554,20 +554,24 @@ th {
         });
     
         // Función para enviar las respuestas
-        document.getElementById('sendBtn').addEventListener('click', () => {
-            if (responses.length > 0) {
-                // Incrementar el contador de respuestas
-                responseCount++;
-                document.getElementById('responseCount').innerText = responseCount;
-    
-                // Mostrar el puntaje total y el nivel de credibilidad
-                updateCredibility(totalScore);
-    
-                alert("Gracias por enviar tus respuestas.");
-            } else {
-                alert("Por favor, selecciona al menos una respuesta antes de enviar.");
-            }
-        });
+document.getElementById('sendBtn').addEventListener('click', () => {
+    if (responses.length > 0) {
+        // Incrementar el contador de respuestas
+        responseCount++;
+        document.getElementById('responseCount').innerText = responseCount;
+
+        // Mostrar el puntaje total y el nivel de credibilidad
+        updateCredibility(totalScore);
+
+        alert("Gracias por enviar tus respuestas.");
+
+        // Redirigir a otro HTML
+        window.location.href = 'index2.html'; // Cambia 'otraPagina.html' por la ruta de tu HTML
+    } else {
+        alert("Por favor, selecciona al menos una respuesta antes de enviar.");
+    }
+});
+
     
         // Función para calcular y mostrar el nivel de credibilidad
         function updateCredibility(score) {
