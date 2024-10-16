@@ -175,7 +175,40 @@ th {
                 font-size: 0.8em;
             }
         }
+        .modal {
+    display: none; /* Escondido por defecto */
+    position: fixed; 
+    z-index: 1000; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+}
 
+/* Contenido del modal */
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* Estilo para el botón de cerrar */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover, .close:focus {
+    color: #000;
+}
 
     </style>
 </head>
@@ -200,6 +233,16 @@ th {
             <p id="credibilityMessage"></p>
         </div>
     </div>
+
+    <!-- Modal -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>¡Gracias por completar el test!</h2>
+        <p>Serás redirigido al siguiente test en unos momentos...</p>
+    </div>
+</div>
+
     
     <!-- Sección de Integridad -->
     <h2>Integridad</h2>
@@ -563,15 +606,24 @@ th {
         // Mostrar el puntaje total y el nivel de credibilidad
         updateCredibility(totalScore);
 
-        alert("Gracias por enviar tus respuestas.");
+        // Mostrar el modal
+        const modal = document.getElementById('myModal');
+        modal.style.display = 'block';
 
-        // Redirigir a otra página después de un retraso de 3 segundos
+        // Redirigir a otra página después de 5 segundos (5000 milisegundos)
         setTimeout(() => {
-            window.location.href = 'index2.html'; // Cambia 'index2.html' por la ruta de tu HTML
-        }, 10000); // 3000 milisegundos = 3 segundos
+            modal.style.display = 'none'; // Ocultar modal
+            window.location.href = 'index2.html'; // Cambia por la ruta de tu HTML
+        }, 10000); // 5000 milisegundos = 5 segundos
+
     } else {
         alert("Por favor, selecciona al menos una respuesta antes de enviar.");
     }
+});
+
+// Opción para cerrar manualmente el modal (si añades el botón de cerrar)
+document.querySelector('.close').addEventListener('click', function() {
+    document.getElementById('myModal').style.display = 'none';
 });
 
 
