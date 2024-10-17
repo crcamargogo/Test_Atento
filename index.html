@@ -29,6 +29,29 @@ th {
     background-color: #0073e6;
     color: white;
 }
+
+.table-responsive {
+    margin: 20px; /* Agrega un margen para separar de los bordes */
+}
+
+.table thead {
+    background: linear-gradient(135deg, #4a90e2, #50e3c2); /* Fondo en gradiente */
+    color: white; /* Color de texto */
+    text-align: center; /* Alinear el texto al centro */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Sombra para profundidad */
+}
+
+.table th {
+    padding: 15px; /* Espaciado interno */
+    border: none; /* Sin bordes en las celdas del encabezado */
+}
+
+.table th:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Fondo ligero al pasar el mouse */
+    cursor: pointer; /* Cambia el cursor para indicar interactividad */
+}
+
 .question {
     width: 30%;
 }
@@ -176,26 +199,31 @@ th {
             }
         }
         .modal {
-    display: none; /* Escondido por defecto */
-    position: fixed; 
-    z-index: 1000; 
+    display: none; /* Ocultar la modal por defecto */
+    position: fixed; /* Posición fija para la modal */
+    z-index: 999; /* Asegurarse de que esté por encima de otros elementos */
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+    width: 100%; /* Ancho completo (opcional, solo si necesitas centrar) */
+    height: 100%; /* Alto completo (opcional, solo si necesitas centrar) */
 }
 
-/* Contenido del modal */
 .modal-content {
-    background-color: #fff;
-    margin: 15% auto;
+    background-color: rgba(255, 255, 255, 0.2); /* Fondo blanco con 20% de transparencia */
+    position: fixed; /* Mantener la posición fija */
+    top: 20px; /* Distancia desde la parte superior */
+    right: 20px; /* Distancia desde la parte derecha */
     padding: 20px;
     border-radius: 10px;
-    width: 80%;
-    max-width: 400px;
+    width: 300px; /* Ancho ajustado */
+    max-width: 400px; /* Máximo ancho */
     text-align: center;
+    z-index: 1000; /* Asegurarse de que esté por encima de otros elementos */
 }
+
+
+
+
 
 /* Estilo para el botón de cerrar */
 .close {
@@ -210,13 +238,58 @@ th {
     color: #000;
 }
 
+.show-full-text-btn {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.show-full-text-btn:hover {
+    background-color: #50e3c2;
+}
+
+
+.modal1 {
+    display: none;
+    position: absolute; /* Cambiado a "absolute" para ubicarlo sobre el botón */
+    z-index: 1000;
+    width: 250px; /* Ancho del modal */
+    max-width: 90%;
+}
+
+.modal1-content {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+.close1 {
+    color: #aaa;
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.close1:hover,
+.close1:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
     </style>
 </head>
 <body>
     <div class="fixed-header">
         <img src="Imagen1.png" alt="Logo" class="logo">
         <h1 class="header-title">Test de Credibilidad</h1>
-        <button class="toggle-button" id="toggleInstructions">Minimizar Instrucciones</button>
+        <button class="toggle-button" id="toggleInstructions" >Minimizar Instrucciones</button>
         <div id="instructionsContainer">
             <p class="instructions">Instrucciones:</p>
             <p class="description">Cada fila integra dos enunciados opuestos sobre algún aspecto, en la que deberás completar con el número del nivel que mejor te define (Entre 1 y 4), según la siguiente escala:</p>
@@ -238,8 +311,10 @@ th {
     <!-- Modal -->
 <div id="myModal" class="modal">
     <div class="modal-content">
-        <span class="close">&times;</span>
+        <span class="close1">&times;</span>
         <h2>¡Gracias por completar el test!</h2>
+
+        
         <p>Serás redirigido al siguiente test en unos momentos...</p>
     </div>
 </div>
@@ -261,16 +336,30 @@ th {
             </thead>
             <tbody>
                 <tr>
-                    <td class="question">A veces encuentro justificacion a decir <mentirillas>,
-                        tergiversar lo que se de personas o situaciones o
-                        manipular la verdad para obtener los resultados que
-                        deseo.</td>
+                    <td class="question">
+                        <center>
+                        <button class="show-full-text-btn" data-text="A veces encuentro justificación a decir mentirillas, tergiversar lo que se de personas o situaciones o manipular la verdad para obtener los resultados que deseo.">
+                            Ver Afirmación
+                        </button></center>
+                    </td>
+
+                    <div id="textModal" class="modal1">
+                        <div class="modal1-content">
+                            <span class="close">&times;</span>
+                            
+                            <p id="modalText"></p>
+                        </div>
                     <td class="range"><button class="button btn-1" data-question="q1" data-value="1">1</button></td>
                     <td class="range"><button class="button btn-2" data-question="q1" data-value="2">2</button></td>
                     <td class="range"><button class="button btn-3" data-question="q1" data-value="3">3</button></td>
                     <td class="range"><button class="button btn-4" data-question="q1" data-value="4">4</button></td>
-                    <td class="question">Soy totalmente honesto en todas mis
-                        interacciones con los demas y en todos los niveles.</td>
+                    <td class="question"><center>
+                        <button class="show-full-text-btn" data-text="Soy totalmente honesto en todas mis
+                        interacciones con los demas y en todos los niveles.">
+                            Ver Afirmación
+                        </button></center></td>
+
+                        
                 </tr>
                 <tr>
                     <td class="question">A veces no hay coincidencia entre lo que pienso y
@@ -576,6 +665,47 @@ th {
         let totalScore = 0; // Inicializar el puntaje total
         let responseCount = 0; // Contador de respuestas
         const responses = []; // Arreglo para almacenar respuestas
+
+
+        // Obtener el modal
+const modal = document.getElementById('textModal');
+
+// Obtener el elemento <span> que cierra el modal
+const span = document.getElementsByClassName('close')[0];
+
+// Obtener todos los botones de la tabla
+const showTextButtons = document.querySelectorAll('.show-full-text-btn');
+
+// Añadir un evento a cada botón para abrir el modal con el texto correcto
+showTextButtons.forEach(button => {
+    button.addEventListener('click', (event) => {
+        // Obtener el texto completo desde el atributo data-text del botón
+        const fullText = button.getAttribute('data-text');
+        // Mostrar el texto completo en el modal
+        document.getElementById('modalText').innerText = fullText;
+        
+        // Obtener la posición del botón
+        const rect = button.getBoundingClientRect();
+        
+        // Ajustar la posición del modal justo encima del botón
+        modal.style.top = (rect.top - modal.offsetHeight - 10) + 'px'; // 10px de espacio por encima del botón
+        modal.style.left = rect.left + 'px'; // Alineado con el borde izquierdo del botón
+        modal.style.display = 'block'; // Mostrar el modal
+    });
+});
+
+// Al hacer clic en <span> (x), cerrar el modal
+span.onclick = function() {
+    modal.style.display = 'none';
+};
+
+// Al hacer clic fuera del modal, también cerrar
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = 'none';
+    }
+};
+
     
         document.querySelectorAll('.button').forEach(button => {
             button.addEventListener('click', () => {
